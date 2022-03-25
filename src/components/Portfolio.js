@@ -18,9 +18,11 @@ class Portfolio extends React.Component {
   }
 
   async fetchPortfolio() {
+    this.setState({ loading: true });
     const portfolio = await fetchPortfolio();
     const { portfolioName, description, birthdate, twitterUsername, timeline } = portfolio;
     this.setState({ portfolioName, description, birthdate, twitterUsername, timeline });
+    this.setState({ loading: false });
   }
 
   async updatePortfolio() {
@@ -95,7 +97,7 @@ class Portfolio extends React.Component {
         <br />
         <h2>Timeline</h2>
         <div>
-          {this.state.timeline.map((t, index) => (
+          {!this.state.loading && this.state.timeline.map((t, index) => (
             <div style={{ fontSize: '80%' }} key={t.id}>{`${index}: ${t.text}`}</div>
           ))}
         </div>

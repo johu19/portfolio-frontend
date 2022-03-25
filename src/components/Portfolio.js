@@ -28,9 +28,9 @@ class Portfolio extends React.Component {
     const { portfolioName, description, birthdate, twitterUsername } = this.state;
     const result = await updatePortfolio(portfolioName, description, twitterUsername, birthdate);
     if (result) {
-        notification.success({ message: 'Portfolio updated', duration: 10 });
+      notification.success({ message: 'Portfolio updated', duration: 10 });
     } else {
-        notification.error({ message: 'Failed updating portfolio', duration: 10 });
+      notification.error({ message: 'Failed updating portfolio', duration: 10 });
     }
     this.fetchPortfolio();
     this.setState({ loading: false });
@@ -74,6 +74,7 @@ class Portfolio extends React.Component {
             </Col>
             <Col span={12}>
               <DatePicker
+                allowClear={false}
                 style={{ width: '100%' }}
                 onChange={(date) => this.setState({ birthdate: moment(date).startOf('day') })}
                 format="YYYY-MM-DD"
@@ -92,14 +93,19 @@ class Portfolio extends React.Component {
           </Row>
         </div>
         <br />
-        <h2>Latest tweets</h2>
+        <h2>Timeline</h2>
         <div>
           {this.state.timeline.map((t, index) => (
             <div style={{ fontSize: '80%' }} key={t.id}>{`${index}: ${t.text}`}</div>
           ))}
         </div>
         <br />
-        <Button loading={this.state.loading} type="primary" onClick={() => this.updatePortfolio()}>
+        <Button
+          disabled={!this.state.portfolioName || !this.state.description || !this.state.twitterUsername || !this.state.birthdate}
+          loading={this.state.loading}
+          type="primary"
+          onClick={() => this.updatePortfolio()}
+        >
           Update
         </Button>
       </div>
